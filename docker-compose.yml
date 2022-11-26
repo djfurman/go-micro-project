@@ -10,6 +10,7 @@ services:
       mode: replicated
       replicas: 1
     environment:
+      # ! todo extract this to environment secrets for anything mocking an alpha-deployment
       DSN: "host=postgres port=5432 user=postgres password=password dbname=users sslmode=disabled timezone=UTC connect_timeout=5"
     ports:
       - "8081:80"
@@ -32,6 +33,7 @@ services:
       replicas: 1
     environment:
       POSTGRES_USER: postgres
+      # ! todo extract this to environment secrets for anything mocking an alpha-deployment
       POSTGRES_PASSWORD: password
       POSTGRES_DB: users
     image: 'postgres:15-alpine'
