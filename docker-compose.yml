@@ -2,13 +2,42 @@
 version: '3'
 
 services:
-  broker-service:
+  authentication-service:
     build:
-      context: ./../go-micro-broker-service
-      dockerfile: ./../go-micro-broker-service/broker-service.dockerfile
-    restart: always
-    ports:
-      - "8080:80"
+      context: ./../authentication-service
+      dockerfile: ./../authentication-service/authentication-service.dockerfile
     deploy:
       mode: replicated
       replicas: 1
+    environment:
+      DSN: "host=postgres port=5432 user=postgres password=password dbname=users sslmode=disabled timezone=UTC connect_timeout=5"
+    ports:
+      - "8081:80"
+    restart: always
+
+  broker-service:
+    build:
+      context: ./../broker-service
+      dockerfile: ./../broker-service/broker-service.dockerfile
+    deploy:
+      mode: replicated
+      replicas: 1
+    ports:
+      - "8080:80"
+    restart: always
+
+  postgres:
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: users
+    image: 'postgres:15-alpine'
+    ports:
+      - "5432:5432"
+    restart: always
+    volumes:
+      - ./db-data/postgres/:/var/lib/postgresql/data/
+
