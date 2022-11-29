@@ -10,7 +10,7 @@ services:
       mode: replicated
       replicas: 1
     environment:
-      # ! todo extract this to environment secrets for anything mocking an alpha-deployment
+      # ! todo extract this to environment secrets for anything mocking an alpha-deployment; local dummy test
       DSN: "host=postgres port=5432 user=postgres password=password dbname=users sslmode=disable timezone=UTC connect_timeout=5"
     ports:
       - "8081:80"
@@ -28,13 +28,38 @@ services:
       - "8080:80"
     restart: always
 
+  logger-service:
+    build:
+      context: ./../logger-service
+      dockerfile: ./../logger-service/logger-service.dockerfile
+    deploy:
+      mode: replicated
+      replicas: 1
+    restart: always
+
+  mongo:
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      MONGO_INITDB_DATABASE: logs
+      MONGO_INITDB_ROOT_USERNAME: admin
+      # ! todo extract this to environment secrets for anything mocking an alpha-deployment; local dummy value
+      MONGO_INITDB_ROOT_PASSWORD: password
+    image: 'mongo:4.4'
+    ports:
+      - "27017:27017"
+    restart: always
+    volumes:
+      - ./db-data/mongo/:/data/db
+
   postgres:
     deploy:
       mode: replicated
       replicas: 1
     environment:
       POSTGRES_USER: postgres
-      # ! todo extract this to environment secrets for anything mocking an alpha-deployment
+      # ! todo extract this to environment secrets for anything mocking an alpha-deployment; local dummy value
       POSTGRES_PASSWORD: password
       POSTGRES_DB: users
     image: 'postgres:15-alpine'
