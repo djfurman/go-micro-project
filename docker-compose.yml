@@ -43,6 +43,24 @@ services:
       DB_USER: ${MONGO_DB_USER}
     restart: always
 
+  mail-service:
+    build:
+      context: ./../mail-service
+      dockerfile: ./../mail-service/mail-service.dockerfile
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      MAIL_DOMAIN: ${MAIL_DOMAIN}
+      MAIL_ENCRYPTION: ${MAIL_ENCRYPTION}
+      MAIL_FROM_ADDR: ${MAIL_FROM_ADDR}
+      MAIL_FROM_NAME: ${MAIL_FROM_NAME}
+      MAIL_HOST: ${MAIL_HOST}
+      MAIL_PASS: ${MAIL_PASS}
+      MAIL_PORT: ${MAIL_PORT}
+      MAIL_USER: ${MAIL_USER}
+    restart: always
+
   mailhog:
     deploy:
       mode: replicated
