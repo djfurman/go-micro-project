@@ -101,3 +101,12 @@ services:
     volumes:
       - ./db-data/postgres/:/var/lib/postgresql/data/
 
+  rabbit:
+    deploy:
+      mode: replicated
+      replicas: 1
+    image: 'rabbitmq:3-alpine'
+    ports:
+      - "5672:5672"
+    volumes:
+      - ./db-data/rabbitmq/:/var/lib/rabbitmq/
