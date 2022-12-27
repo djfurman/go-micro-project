@@ -26,7 +26,7 @@ build_front:
 ## build_listener: builds the queue interaction binary
 build_listener:
 	@echo "Building the listener binary ..."
-	cd ../listener-service && env GOOS=linux GGO_ENABLED=0 go build -o ${LISTENER_BINARY} ./cmd/api
+	cd ../listener-service && env GOOS=linux GGO_ENABLED=0 go build -o ${LISTENER_BINARY} .
 	@echo "Done!"
 
 ## build_log: builds the log service binary as a linux executable
