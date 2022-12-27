@@ -30,6 +30,19 @@ services:
       - "8080:80"
     restart: always
 
+  listener-service:
+    build:
+      context: ./../listener-service
+      dockerfile: ./../listener-service/listener-service.dockerfile
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      RABBIT_CLIENT_ID: ${RABBIT_CLIENT_ID}
+      RABBIT_CLIENT_SECRET: ${RABBIT_CLIENT_SECRET}
+      RABBIT_HOST: ${RABBIT_HOST}
+    restart: always
+
   logger-service:
     build:
       context: ./../logger-service
